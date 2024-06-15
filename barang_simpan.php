@@ -11,20 +11,27 @@ $nama   = $_POST['nama'];
 $harga  = $_POST['harga'];
 $stok   = $_POST['stok'];
 
-$foto       = $_FILES['foto']['name'];
-$tmpName    = $_FILES['foto']['tmp_name'];
-$size       = $_FILES['foto']['size'];
-$type       = $_FILES['foto']['type'];
+$foto = "";
+$tmpName = "";
+$size = 0;
+$type = "";
+
+if (isset($_FILES['foto']) && $_FILES['foto']['error'] == UPLOAD_ERR_OK) {
+    $foto       = $_FILES['foto']['name'];
+    $tmpName    = $_FILES['foto']['tmp_name'];
+    $size       = $_FILES['foto']['size'];
+    $type       = $_FILES['foto']['type'];
+}
 
 $maxsize     = 1500000;
 $typeYgBoleh = array("image/jpeg", "image/png", "image/pjpeg");
 
 $dirFoto    = "pict";
-if (!is_dir($dirFoto)) mkdir($dirFoto);
+if (!is_dir($dirFoto)) mkdir($dirFoto, 0755, true);
 $fileTujuanFoto = $dirFoto . "/" . $foto;
 
 $dirThumb   = "thumb";
-if (!is_dir($dirThumb)) mkdir($dirThumb);
+if (!is_dir($dirThumb)) mkdir($dirThumb, 0755, true);
 $fileTujuanThumb = $dirThumb . "/t_" . $foto;
 
 $dataValid = "YA";
@@ -60,11 +67,11 @@ if ($dataValid == "TIDAK") {
 
 include "koneksi.php";
 
-if($simpan == "EDIT") {
-    if($size == 0) {
+if ($simpan == "EDIT") {
+    if ($size == 0) {
         $foto = $foto_lama;
     }
-    $sql = "UPDATE barang SET nama = '$nama', harga = $harga, stok = $stok , foto = '$foto' WHERE idbarang = $idbarang";
+    $sql = "UPDATE barang SET nama = '$nama', harga = $harga, stok = $stok, foto = '$foto' WHERE idbarang = $idbarang";
 } else {
     $sql = "INSERT INTO barang (nama, harga, stok, foto) VALUES ('$nama', '$harga', '$stok', '$foto')";
 }
@@ -117,10 +124,10 @@ function buat_thumbnail($file_src, $file_dst)
 
     $img_dst = imagecreatetruecolor($w_dst, $h_dst);
     imagecopyresampled($img_dst, $img_src, 0, 0, 0, 0, $w_dst, $h_dst, $w_src, $h_src);
-    imagejpeg($img_dst, $file_dst);
+    imagejpeg($img_dst, $file_dst, 90);
     imagedestroy($img_src);
     imagedestroy($img_dst);
 }
 ?>
 <hr/>
-<a href="barang_tampil.php"/>DAFTAR BARANG</a>
+<a href="barang_tampil.php">DAFTAR BARANG</a>

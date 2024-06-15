@@ -1,5 +1,5 @@
 <h2>.:: ISI BARANG ::.</h2>
-<form action="barang_simpan.php" method="post" encyptype="multipart/form-data">
+<form action="barang_simpan.php" method="post" enctype="multipart/form-data">
     <table border="1">
         <tr>
             <td>Nama Barang</td>
